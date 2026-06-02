@@ -1,0 +1,29 @@
+-- select * from fb_friend_requests;
+/*
+acceptance rate per day shud be accepted/sent group by date
+the problem is to get accepted and sent separately to aggregate later
+    - how
+        - joins on cte?
+- post question remarks:
+    - the main problem to look up was the math related
+        - cast()
+        - as decimal
+*/
+with s_cte as (
+    select date, user_id_sender, user_id_receiver
+    from fb_friend_requests
+    where action = 'sent'
+),
+accep_cte as (
+    select date, user_id_sender, user_id_receiver
+    from fb_friend_requests
+    where action = 'accepted'
+)
+select a.date, 
+        count(b.user_id_receiver)/CAST(count(a.user_id_sender) AS decimal) as
+        perc_acceptance
+    from s_cte a
+    left join accep_cte b on
+        a.user_id_sender = b.user_id_sender and
+        a.user_id_receiver=b.user_id_receiver
+    group by a.date 
