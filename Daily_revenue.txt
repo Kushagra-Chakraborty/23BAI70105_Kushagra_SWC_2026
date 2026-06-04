@@ -1,0 +1,10 @@
+/*
++ need to understand the NET REVENUE performance of 'PROD-2891'
+    -  purchases made during RECENT 2-WEEK period
+    - calculate daily net revenue for APRIL-2025 from 15 to 28
+*/
+
+select transaction_date, sum(amount) daily_net_revenue from product_sales
+where product_id = 'PROD-2891' and country = 'US' and transaction_date >= '2025-04-15' and transaction_date <= '2025-04-28'
+group by transaction_date
+order by transaction_date
