@@ -1,0 +1,87 @@
+-- CREATE TABLE transactions
+-- (
+-- transaction_id INT PRIMARY KEY,
+-- merchant_id INT,
+-- credit_card_id INT,
+-- amount INT,
+-- transaction_timestamp TIMESTAMP
+-- );
+-- INSERT INTO transactions
+-- VALUES
+-- (1, 101, 1, 100, '2022-09-25 12:00:00'),
+-- (2, 101, 1, 100, '2022-09-25 12:08:00'),
+-- (3, 101, 1, 100, '2022-09-25 12:28:00'),
+-- (4, 102, 2, 300, '2022-09-25 12:00:00'),
+-- (6, 102, 2, 400, '2022-09-25 14:00:00');
+
+
+-- select * from transactions;
+
+-- select count(*) payment_count from
+-- transactions t1
+-- join 
+-- transactions t2 
+-- on t1.transaction_id = t2.transaction_id
+-- where t1.credit_card_id = t2.credit_card_id and 
+-- t1.merchant_id = t2.merchant_id and 
+-- t1.transaction_timestamp < t2.transaction_timestamp + interval '00:10:00';
+
+------------------------------------------------------------------------------------------------------------------------
+-- CREATE TABLE user_actions
+-- (
+-- user_id INT,
+-- event_id INT,
+-- event_type VARCHAR(20),
+-- event_date TIMESTAMP
+-- );
+-- INSERT INTO user_actions
+-- VALUES
+-- (445, 7765, 'sign-in', '2022-06-05 12:00:00'),
+-- (742, 6458, 'sign-in', '2022-06-10 12:00:00'),
+-- (648, 3124, 'like', '2022-06-18 12:00:00'),
+-- (445, 3634, 'like', '2022-07-05 12:00:00'),
+-- (742, 1374, 'comment', '2022-07-15 12:00:00'),
+-- (999, 5555, 'sign-in', '2022-07-20 12:00:00');
+
+
+-- select * from user_actions;
+
+-- select extract(month from u1.event_date) _month  , count(u1.user_id) monthly_active_users from
+-- user_actions u1
+-- join
+-- user_actions u2
+-- on u1.user_id = u2.user_id and
+-- u1.event_type = 'sign-in' and (u2.event_type = 'like' or u2.event_type = 'like') and 
+-- u1.event_date < u2.event_date
+-- group by extract(month from u1.event_date)
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+-- CREATE TABLE Submissions (
+-- sub_id INT,
+-- parent_id INT
+-- );
+-- INSERT INTO Submissions (sub_id, parent_id) VALUES
+-- (1, NULL),
+-- (2, NULL),
+-- (1, NULL),
+-- (12, NULL),
+-- (3, 1),
+-- (5, 2),
+-- (3, 1),
+-- (4, 1),
+-- (9, 1),
+-- (10, 2),
+-- (6, 7);
+
+-- select
+--  s.sub_id post_id, count(distinct s1.sub_id) number_of_comments from 
+-- (select distinct sub_id
+-- from Submissions
+-- where parent_id is null) s
+-- left join 
+-- Submissions s1
+-- on s1.parent_id = s.sub_id
+-- group by s.sub_id
+-- order by s.sub_id;
+
